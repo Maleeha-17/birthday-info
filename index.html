@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real Birthday Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #396d62, #403e4d);
+      color: #fff;
+      text-align: center;
+      padding: 50px;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      border-radius: 15px;
+      display: inline-block;
+      max-width: 450px;
+    }
+
+    input[type="date"] {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      margin: 15px 0;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #302a25;
+      color: #fff;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #1a1817;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      line-height: 1.6;
+      border:2px solid whitesmoke;
+      border-radius: 20px ;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎉 Real Birthday Calculator 🎉</h1>
+    <p>Enter your date of birth:</p>
+    <input type="date" id="birthDate">
+    <br>
+    <button onclick="calculateBirthday()">Find My Birthday Info</button>
+    <p id="result"></p>
+  </div>
+
+  <script>
+    function calculateBirthday() {
+      let input = document.getElementById("birthDate").value;
+      let result = document.getElementById("result");
+
+      if (!input) {
+        result.innerText = "⚠️ Please select a date first!";
+        return;
+      }
+
+      let birthDate = new Date(input);
+      let today = new Date();
+      let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      
+      // 1. Real birthday day
+      let bornDay = days[birthDate.getDay()];
+
+      // 2. Next birthday
+      let currentYear = today.getFullYear();
+      let nextBirthday = new Date(currentYear, birthDate.getMonth(), birthDate.getDate());
+      if (nextBirthday < today) {
+        nextBirthday.setFullYear(currentYear + 1);
+      }
+      let nextDay = days[nextBirthday.getDay()];
+      let nextDateFormatted = nextBirthday.toDateString();
+
+      // 3. Age calculation
+      let age = currentYear - birthDate.getFullYear();
+      let hasHadBirthdayThisYear =
+        today.getMonth() > birthDate.getMonth() ||
+        (today.getMonth() === birthDate.getMonth() && today.getDate() >= birthDate.getDate());
+      if (!hasHadBirthdayThisYear) {
+        age--; // birthday still coming this year
+      }
+       // 4. Countdown days until next birthday
+      let oneDay = 1000 * 60 * 60 * 24;
+      let diffInTime = nextBirthday.getTime() - today.getTime();
+      let daysLeft = Math.ceil(diffInTime / oneDay);
+
+      // Show results
+      result.innerHTML = `
+        🎂 You were born on a <b>${bornDay}</b>.<br>
+        📅 You are <b>${age}</b> years old.<br>
+        🎁 Your next birthday will be on <b>${nextDay}</b> (${nextDateFormatted}). 
+        <br>
+        ⏳ Only <b>${daysLeft}</b> day(s) left until your next birthday! 🎊
+
+      `;
+    }
+  </script>
+</body>
+</html>
+
